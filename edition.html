@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>meanwhile — edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand tokens (BRAND.md is the source of truth, overrides the mockup) ── */
+  :root {
+    --paper: #F2F0EB;   /* light surfaces */
+    --ink:   #17181A;   /* text on paper */
+    --blue:  #3C4CE6;   /* accent — used sparingly */
+    --dark:  #17181C;   /* dark surfaces (card backs) */
+
+    /* neutral tints carried over from the mockup */
+    --ink-a14: rgba(23,24,26,0.14);
+    --ink-a12: rgba(23,24,26,0.12);
+    --ink-a10: rgba(23,24,26,0.10);
+    --ink-a08: rgba(23,24,26,0.08);
+    --card:    #FDFDFB;
+    --muted-1: #8B8A84;
+    --muted-2: #55544F;
+    --muted-3: #A6A59E;
+
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); }
+  body {
+    -webkit-font-smoothing: antialiased;
+    color: var(--ink);
+    font-family: 'Onest', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--ink); text-decoration-color: rgba(23,24,26,0.35); }
+  a:hover { color: var(--blue); text-decoration-color: var(--blue); }
+  ::selection { background: rgba(60,76,230,0.16); }
+
+  .wrap { max-width: 664px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Header ── */
+  .masthead {
+    padding-top: clamp(40px, 7vh, 72px);
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  }
+  .wordmark-link { display: block; line-height: 0; }
+  .wordmark-link img { height: 20px; width: auto; display: block; }
+  .wordmark-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .all-editions {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--muted-1); text-decoration: none;
+  }
+  .all-editions:hover { color: var(--blue); }
+  .all-editions:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* ── Hero ── */
+  .hero {
+    padding: clamp(56px, 10vh, 96px) 0 0;
+    display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap;
+  }
+  .hero-copy { flex: 1; min-width: 240px; order: 1; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted-1); }
+  .hero-title {
+    font-weight: 500; font-size: clamp(28px, 5vw, 40px); line-height: 1.14;
+    letter-spacing: -0.02em; margin: 12px 0 0; max-width: 14em; text-wrap: pretty;
+  }
+  .spec-line {
+    margin-top: 16px; font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.06em; color: var(--muted-2);
+  }
+  .blurb {
+    margin: 20px 0 0; font-size: 15px; line-height: 1.55;
+    color: var(--muted-2); max-width: 30em; text-wrap: pretty;
+  }
+  .cta-row { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .buy {
+    display: inline-block; background: var(--blue); color: var(--paper);
+    text-decoration: none; font-size: 15px; font-weight: 500;
+    padding: 11px 22px; border-radius: 7px;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .buy:hover { background: var(--ink); color: var(--paper); }
+  .buy:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  /* editions aren't for sale yet: a quiet, non-clickable placeholder */
+  .buy.soon {
+    background: transparent; color: var(--muted-2);
+    border: 1px solid var(--ink-a14); pointer-events: none;
+  }
+
+  /* Cover — a placeholder standing in for edition artwork. */
+  .cover {
+    width: 210px; height: 263px; flex-shrink: 0; order: 2;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(23,24,26,0.08), 0 24px 48px -18px rgba(23,24,26,0.32);
+    background: var(--dark); color: var(--paper);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 18px 18px 20px;
+  }
+
+  /* ── Section scaffolding ── */
+  .section { border-top: 1px solid var(--ink-a14); padding-top: 20px; }
+  .section-samples { margin-top: clamp(64px, 11vh, 104px); }
+  .section-after   { margin-top: clamp(56px, 9vh, 88px); }
+  .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--muted-1); }
+
+  .cards {
+    margin-top: 20px; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+  }
+
+  /* ── Flip card ── */
+  .card {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    perspective: 900px; display: block; height: 190px;
+  }
+  .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 9px; }
+  .card-inner {
+    display: block; position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+  }
+  .card.is-flipped .card-inner { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    display: flex; flex-direction: column; border-radius: 9px; padding: 14px 16px;
+  }
+  .face-front {
+    background: var(--card); border: 1px solid var(--ink-a10);
+    box-shadow: 0 1px 2px rgba(23,24,26,0.06);
+  }
+  .face-back {
+    background: var(--dark); color: var(--paper);
+    transform: rotateY(180deg);
+  }
+  .face-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--muted-1); }
+  .face-back .face-label { color: rgba(242,240,235,0.45); }
+
+  .word {
+    flex: 1; display: flex; align-items: center;
+    font-weight: 600; font-size: 24px; letter-spacing: -0.015em;
+  }
+  .front-hint {
+    padding-top: 9px; border-top: 1px solid var(--ink-a08);
+    font-family: var(--mono); font-size: 10px; color: var(--muted-3);
+  }
+
+  /* flag band */
+  .band {
+    flex: 1; display: flex; margin: 14px 0 10px;
+    border: 1px solid var(--ink-a12); border-radius: 4px; overflow: hidden;
+  }
+  .band.dir-column { flex-direction: column; }
+  .band > span { flex: 1; }
+
+  .back-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .back-title { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .back-note { font-size: 12.5px; line-height: 1.5; color: rgba(242,240,235,0.65); }
+
+  /* ── After-you-buy ── */
+  .after-copy { margin: 20px 0 0; font-size: 15px; line-height: 1.6; color: var(--muted-2); max-width: 34em; text-wrap: pretty; }
+
+  /* ── Footer ── */
+  .foot {
+    margin-top: clamp(72px, 12vh, 112px); border-top: 1px solid var(--ink-a14);
+    padding: 32px 0 56px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  }
+  .foot-back { font-size: 14.5px; text-decoration: underline; text-underline-offset: 3px; }
+  .foot-note { font-family: var(--mono); font-size: 11px; color: var(--muted-3); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <a class="wordmark-link" href="index.html"><img src="assets/wordmark.png" alt="meanwhile"></a>
+      <a class="all-editions" href="editions.html">ALL EDITIONS</a>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow" id="eyebrow"></div>
+        <h1 class="hero-title" id="title"></h1>
+        <div class="spec-line" id="spec"></div>
+        <p class="blurb" id="blurb"></p>
+        <div class="cta-row">
+          <a class="buy" id="buy" href="#"></a>
+        </div>
+      </div>
+      <div class="cover" id="cover"></div>
+    </section>
+
+    <section class="section section-samples">
+      <div class="kicker" id="samples-kicker"></div>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section class="section section-after">
+      <div class="kicker">AFTER YOU BUY</div>
+      <p class="after-copy">You&rsquo;ll get a link that opens Meanwhile and installs the edition. New machine later? Same link — or Restore purchases in the menu bar.</p>
+    </section>
+
+    <footer class="foot">
+      <a class="foot-back" href="editions.html">&larr; All editions</a>
+      <span class="foot-note">bought here, never in-app · your receipts are your login</span>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    // Edition catalogue — the three editions the mockup ships with.
+    var EDITIONS = {
+      'words-from-the-sea': {
+        num: 'Nº 3', title: 'Words from the Sea', slotLabel: 'WORD ORIGINS', slotShort: 'WORD ORIGINS',
+        count: '40', price: '$6',
+        blurb: 'English is a sailor’s language that moved inland. Aboard, aloof, overwhelm — the fleet is still in the grammar. Forty words that came ashore, one per wait.',
+        buyUrl: 'https://meanwhile.lemonsqueezy.com/buy/edition-3',
+        samples: [
+          { front: 'overwhelm', back: 'to capsize', note: 'From Middle English whelmen — to overturn a boat. The boat left; the feeling stayed.' },
+          { front: 'strand', back: 'the shore itself', note: 'Old English. To be stranded is simply to be left on the beach.' },
+          { front: 'nausea', back: 'ship-sickness', note: 'From Greek naus, ship. Seasickness first; everything else later.' }
+        ]
+      },
+      'flags-of-africa': {
+        num: 'Nº 2', title: 'Flags of Africa', slotLabel: 'FLAGS & SHAPES', slotShort: 'FLAGS & SHAPES',
+        count: '54', price: '$6',
+        blurb: 'Fifty-four flags, and most of us can name six. One flag per card — its geometry, its borrowings, the argument it settled. The continent stops being a shape you scroll past.',
+        buyUrl: 'https://meanwhile.lemonsqueezy.com/buy/edition-2',
+        samples: [
+          { flag: true, dir: 'row',    b1: '#008751', b2: '#FFFFFF', b3: '#008751', back: 'Nigeria',      note: 'Green for land, white for peace. Designed by a student in 1959.' },
+          { flag: true, dir: 'column', b1: '#009E60', b2: '#FCD116', b3: '#3A75C4', back: 'Gabon',        note: 'The yellow stripe is the Equator, which runs through the country.' },
+          { flag: true, dir: 'column', b1: '#1EB53A', b2: '#FFFFFF', b3: '#0072C6', back: 'Sierra Leone', note: 'Blue for the natural harbor at Freetown.' }
+        ]
+      },
+      'spanish-first-hundred': {
+        num: 'Nº 1', title: 'Spanish: First Hundred', slotLabel: 'LANGUAGE CARDS', slotShort: 'LANGUAGE CARDS',
+        count: '100', price: '$8',
+        blurb: 'Frequency isn’t romantic, but it works. These are the hundred words that carry most Spanish sentences — one wait at a time, with the article attached so the gender comes free.',
+        buyUrl: 'https://meanwhile.lemonsqueezy.com/buy/edition-1',
+        samples: [
+          { front: 'siempre', back: 'always', note: 'Nº 34 by frequency. From Latin semper.' },
+          { front: 'casi',    back: 'almost', note: 'The most honest word in any estimate.' },
+          { front: 'ahora',   back: 'now',    note: 'The word Spanish plans around.' }
+        ]
+      }
+    };
+    var DEFAULT_SLUG = 'words-from-the-sea';
+
+    var $ = function (id) { return document.getElementById(id); };
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+    function currentSlug() {
+      var h = (window.location.hash || '').replace('#', '');
+      return EDITIONS[h] ? h : DEFAULT_SLUG;
+    }
+
+    function sampleCard(card, slotShort) {
+      var isFlag = !!card.flag;
+      var faceMid = isFlag
+        ? '<span class="band dir-' + (card.dir || 'row') + '">' +
+            '<span style="background:' + esc(card.b1) + '"></span>' +
+            '<span style="background:' + esc(card.b2) + '"></span>' +
+            '<span style="background:' + esc(card.b3) + '"></span>' +
+          '</span>'
+        : '<span class="word">' + esc(card.front) + '</span>';
+      var frontHint = isFlag ? 'which country?' : 'click to flip';
+
+      return '' +
+        '<button class="card" type="button" aria-label="Flip card">' +
+          '<span class="card-inner">' +
+            '<span class="face face-front">' +
+              '<span class="face-label">MEANWHILE · ' + esc(slotShort) + '</span>' +
+              faceMid +
+              '<span class="front-hint">' + esc(frontHint) + '</span>' +
+            '</span>' +
+            '<span class="face face-back">' +
+              '<span class="face-label">MEANWHILE · ' + esc(slotShort) + '</span>' +
+              '<span class="back-body">' +
+                '<span class="back-title">' + esc(card.back) + '</span>' +
+                '<span class="back-note">' + esc(card.note) + '</span>' +
+              '</span>' +
+            '</span>' +
+          '</span>' +
+        '</button>';
+    }
+
+    function render() {
+      var slug = currentSlug();
+      var ed = EDITIONS[slug];
+
+      $('eyebrow').textContent = 'EDITION ' + ed.num;
+      $('title').textContent = ed.title;
+      $('spec').textContent = 'LOADS INTO · ' + ed.slotLabel + ' · ' + ed.count + ' CARDS · ' + ed.price;
+      $('blurb').textContent = ed.blurb;
+
+      var buy = $('buy');
+      // Editions aren't on sale yet — show the price as a teaser, no checkout.
+      buy.textContent = 'Coming soon — ' + ed.price;
+      buy.classList.add('soon');
+      buy.removeAttribute('href');
+
+      $('samples-kicker').textContent = 'THREE OF THE ' + ed.count + ' — CLICK TO FLIP';
+
+      var cards = $('cards');
+      cards.innerHTML = ed.samples.map(function (c) { return sampleCard(c, ed.slotShort); }).join('');
+      Array.prototype.forEach.call(cards.querySelectorAll('.card'), function (btn) {
+        btn.addEventListener('click', function () { btn.classList.toggle('is-flipped'); });
+      });
+    }
+
+    window.addEventListener('hashchange', render);
+    render();
+  })();
+  </script>
+</body>
+</html>

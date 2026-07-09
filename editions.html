@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>meanwhile — all editions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand tokens (BRAND.md is the source of truth, overrides the mockup) ── */
+  :root {
+    --paper: #F2F0EB;
+    --ink:   #17181A;
+    --blue:  #3C4CE6;
+    --dark:  #17181C;
+
+    --ink-a14: rgba(23,24,26,0.14);
+    --ink-a10: rgba(23,24,26,0.10);
+    --ink-a08: rgba(23,24,26,0.08);
+    --card:    #FDFDFB;
+    --muted-1: #8B8A84;
+    --muted-2: #55544F;
+    --muted-3: #A6A59E;
+
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); }
+  body {
+    -webkit-font-smoothing: antialiased;
+    color: var(--ink);
+    font-family: 'Onest', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--ink); text-decoration-color: rgba(23,24,26,0.35); }
+  a:hover { color: var(--blue); text-decoration-color: var(--blue); }
+  ::selection { background: rgba(60,76,230,0.16); }
+
+  .wrap { max-width: 664px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Header ── */
+  .masthead {
+    padding-top: clamp(40px, 7vh, 72px);
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  }
+  .wordmark-link { display: block; line-height: 0; }
+  .wordmark-link img { height: 20px; width: auto; display: block; }
+  .wordmark-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .for-mac { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--muted-1); }
+
+  /* ── Page head ── */
+  .page-head { padding: clamp(56px, 10vh, 96px) 0 0; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted-1); }
+  .page-title {
+    font-weight: 500; font-size: clamp(28px, 5vw, 40px); line-height: 1.14;
+    letter-spacing: -0.02em; margin: 12px 0 0; max-width: 16em; text-wrap: pretty;
+  }
+  .page-sub { margin: 18px 0 0; font-size: 15px; line-height: 1.6; color: var(--muted-2); max-width: 32em; text-wrap: pretty; }
+
+  /* ── Catalogue rows ── */
+  .catalogue { margin-top: clamp(48px, 8vh, 72px); }
+  .row {
+    display: flex; gap: 26px; align-items: flex-start;
+    border-top: 1px solid var(--ink-a14);
+    padding: 28px 0 32px;
+    text-decoration: none; color: var(--ink);
+  }
+  .row:hover .row-title { color: var(--blue); }
+  .row:hover .cover { transform: translateY(-3px); }
+  .row:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 8px; }
+
+  .cover {
+    width: 128px; aspect-ratio: 4 / 5; flex-shrink: 0;
+    border-radius: 8px; overflow: hidden;
+    background: var(--dark); color: var(--paper);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 12px 13px 14px;
+    box-shadow: 0 1px 2px rgba(23,24,26,0.10), 0 16px 32px -14px rgba(23,24,26,0.30);
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .row-copy { flex: 1; min-width: 200px; }
+  .row-num { font-family: var(--mono); font-size: 11px; color: var(--muted-3); }
+  .row-title { font-weight: 590; font-size: 20px; letter-spacing: -0.012em; margin-top: 3px; transition: color 0.15s ease; }
+  .row-spec {
+    margin-top: 6px; font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.06em; color: var(--muted-2);
+  }
+  .row-blurb { margin: 12px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--muted-2); max-width: 30em; text-wrap: pretty; }
+  .row-view { margin-top: 14px; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 480px) {
+    .row { flex-direction: column; gap: 18px; }
+  }
+
+  /* ── The quiet line about starters ── */
+  .starters {
+    margin-top: 8px; border-top: 1px solid var(--ink-a14); padding-top: 24px;
+    font-size: 14.5px; color: var(--muted-2); max-width: 34em; text-wrap: pretty;
+  }
+
+  /* ── Footer ── */
+  .foot {
+    margin-top: clamp(72px, 12vh, 112px); border-top: 1px solid var(--ink-a14);
+    padding: 32px 0 56px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  }
+  .foot-back { font-size: 14.5px; text-decoration: underline; text-underline-offset: 3px; }
+  .foot-note { font-family: var(--mono); font-size: 11px; color: var(--muted-3); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <a class="wordmark-link" href="index.html"><img src="assets/wordmark.png" alt="meanwhile"></a>
+      <span class="for-mac">FOR macOS</span>
+    </header>
+
+    <section class="page-head">
+      <div class="eyebrow">ALL EDITIONS</div>
+      <h1 class="page-title">Small, finished sets. Numbered, like issues.</h1>
+      <p class="page-sub">An edition loads into one activity in the app and goes deeper than the starter set. Bought once, owned forever, installed with a link. New editions arrive now and then; old ones stay available.</p>
+    </section>
+
+    <section class="catalogue" id="catalogue" aria-label="All editions"></section>
+
+    <p class="starters">The app itself ships with starter sets for every activity — Spanish essentials, world flags, word roots, a small gallery, a breath. Editions are for when one of them gets under your skin.</p>
+
+    <footer class="foot">
+      <a class="foot-back" href="index.html">&larr; meanwhile</a>
+      <span class="foot-note">bought here, never in-app · your receipts are your login</span>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    // Newest first, matching the numbering. Slugs match edition.html.
+    var EDITIONS = [
+      {
+        num: 'Nº 3', title: 'Words from the Sea', slotLabel: 'WORD ORIGINS',
+        count: '40', price: '$6', slug: 'words-from-the-sea',
+        blurb: 'English is a sailor’s language that moved inland. Aboard, aloof, overwhelm — the fleet is still in the grammar. Forty words that came ashore, one per wait.'
+      },
+      {
+        num: 'Nº 2', title: 'Flags of Africa', slotLabel: 'FLAGS & SHAPES',
+        count: '54', price: '$6', slug: 'flags-of-africa',
+        blurb: 'Fifty-four flags, and most of us can name six. One flag per card — its geometry, its borrowings, the argument it settled.'
+      },
+      {
+        num: 'Nº 1', title: 'Spanish: First Hundred', slotLabel: 'LANGUAGE CARDS',
+        count: '100', price: '$8', slug: 'spanish-first-hundred',
+        blurb: 'Frequency isn’t romantic, but it works. The hundred words that carry most Spanish sentences — with the article attached so the gender comes free.'
+      }
+    ];
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+    document.getElementById('catalogue').innerHTML = EDITIONS.map(function (e) {
+      var href = 'edition.html#' + e.slug;
+      return '' +
+        '<a class="row" href="' + href + '">' +
+          '<span class="cover"></span>' +
+          '<span class="row-copy">' +
+            '<span class="row-num">' + esc(e.num) + '</span>' +
+            '<div class="row-title">' + esc(e.title) + '</div>' +
+            '<div class="row-spec">LOADS INTO · ' + esc(e.slotLabel) + ' · ' + esc(e.count) + ' CARDS · ' + esc(e.price) + '</div>' +
+            '<p class="row-blurb">' + esc(e.blurb) + '</p>' +
+            '<div class="row-view">View edition &rarr;</div>' +
+          '</span>' +
+        '</a>';
+    }).join('');
+  })();
+  </script>
+</body>
+</html>
