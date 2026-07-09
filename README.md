@@ -14,8 +14,11 @@ Grab the latest **[Meanwhile.dmg from Releases](../../releases/latest)**,
 open it, and drag Meanwhile into Applications.
 
 **First launch:** because this beta isn't notarized by Apple yet, macOS will
-warn you the first time. Right-click (or Control-click) Meanwhile in your
-Applications folder and choose **Open** — you only do this once.
+block it the first time. Click **Done** on the warning, then open **System
+Settings → Privacy & Security**, scroll to Security, and click **Open Anyway**.
+You only do this once.
+
+(Terminal shortcut, if you prefer: `xattr -dr com.apple.quarantine /Applications/Meanwhile.app`)
 
 ## Connect Claude
 
