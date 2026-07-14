@@ -119,6 +119,23 @@
     border-radius: 4px; image-rendering: pixelated;
     background: #101014; border: 1px solid rgba(242,240,235,0.08);
   }
+  .demo-card .flag {
+    display: block; height: 46px; width: auto; margin-top: 9px;
+    border: 1px solid var(--ink-a10); border-radius: 3px;
+  }
+  .demo-card .breath { position: relative; width: 62px; height: 62px; margin: 12px auto 4px; }
+  .demo-card .breath .ring {
+    position: absolute; inset: 0; border: 1px solid var(--ink-a10); border-radius: 50%;
+  }
+  .demo-card .breath .fill {
+    position: absolute; left: 50%; top: 50%; width: 24px; height: 24px;
+    margin: -12px 0 0 -12px; border-radius: 50%; background: rgba(60,76,230,0.16);
+    animation: mw-breathe 3.8s ease-in-out infinite;
+  }
+  @keyframes mw-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(2.3); }
+  }
 
   /* reduced-motion static demo */
   .static-demo {
@@ -200,7 +217,7 @@
       <p class="hero-sub">Meanwhile gives the wait one small job — then puts you back.</p>
 
       <!-- animated demo -->
-      <div class="demo" id="demo" aria-label="Demo: a terminal task runs, a small card appears with one word to learn, the task finishes and you are returned to the terminal">
+      <div class="demo" id="demo" aria-label="Demo: a terminal task runs, a small card appears with a flag to name, the task finishes and you are returned to the terminal">
         <div class="demo-bar">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
           <span class="path">zsh — ~/work/api</span>
@@ -212,9 +229,9 @@
           <div class="hidden" id="line-back"><span class="prm">❯</span> <span class="caret"></span></div>
         </div>
         <div class="demo-card" id="demo-card">
-          <div class="label">MEANWHILE · WORD ORIGINS</div>
-          <div class="word">deadline</div>
-          <p>A line drawn around a Civil War prison. Cross it, get shot. Now: Friday.</p>
+          <div class="label">MEANWHILE · FLAGS OF THE WORLD</div>
+          <svg class="flag" viewBox="0 0 30 20" role="img" aria-label="Flag of Japan"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>
+          <p>Japan</p>
           <div class="foot">dismisses when your task finishes</div>
         </div>
       </div>
@@ -228,8 +245,8 @@
         </div>
         <div class="sd-frame sd-light">
           <div class="sd-step">2 · ONE CARD APPEARS</div>
-          <div class="w">deadline</div>
-          <p>A line around a Civil War prison. Now: Friday.</p>
+          <svg viewBox="0 0 30 20" role="img" aria-label="Flag of Japan" style="display:block;height:34px;width:auto;border:1px solid var(--ink-a10);border-radius:3px;margin:6px 0 2px"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>
+          <p>Japan</p>
         </div>
         <div class="sd-frame sd-dark">
           <div class="sd-step">3 · YOU'RE BACK</div>
@@ -256,7 +273,7 @@
         </div>
         <div>
           <h2>It offers one thing.</h2>
-          <p>One card. A word, a flag, an etymology. Thirty seconds, fully formed.</p>
+          <p>One small thing. A flag to name, a round of snake, a breath. Thirty seconds, fully formed.</p>
         </div>
         <div>
           <h2>It puts you back.</h2>
@@ -321,25 +338,25 @@
       return;
     }
 
-    // The wait offers something different each cycle, mirroring the app's
-    // activities: a word origin, a game of snake, a Spanish flashcard.
+    // The wait offers something different each cycle, mirroring the free
+    // build: a flag to name, a game of snake, a breath.
     var CARD = {
-      word:
-        '<div class="label">MEANWHILE · WORD ORIGINS</div>' +
-        '<div class="word">deadline</div>' +
-        '<p>A line drawn around a Civil War prison. Cross it, get shot. Now: Friday.</p>' +
+      flag:
+        '<div class="label">MEANWHILE · FLAGS OF THE WORLD</div>' +
+        '<svg class="flag" viewBox="0 0 30 20" role="img" aria-label="Flag of Japan"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>' +
+        '<p>Japan</p>' +
         '<div class="foot">dismisses when your task finishes</div>',
-      spanish:
-        '<div class="label">MEANWHILE · LANGUAGE CARDS</div>' +
-        '<div class="word">sueño</div>' +
-        '<p>dream · sleep</p>' +
+      breath:
+        '<div class="label">MEANWHILE · BREATH BREAK</div>' +
+        '<div class="breath"><div class="ring"></div><div class="fill"></div></div>' +
+        '<p style="text-align:center">four in, four out</p>' +
         '<div class="foot">dismisses when your task finishes</div>',
       snake:
         '<div class="label">MEANWHILE · SNAKE</div>' +
         '<canvas id="mw-snake"></canvas>' +
         '<div class="foot">the walls are real</div>'
     };
-    var VARIANTS = ['word', 'snake', 'spanish'];
+    var VARIANTS = ['flag', 'snake', 'breath'];
 
     // A snake that plays itself: greedy toward the food, one-step lookahead
     // so it rarely walls itself; a wall or self-collision just restarts.
